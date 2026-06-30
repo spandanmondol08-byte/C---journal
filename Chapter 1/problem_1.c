@@ -1,3 +1,5 @@
+//Area of a rectangle
+
 #include <stdio.h>
 int main()
 {
