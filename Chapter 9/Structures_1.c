@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 
-int main() {
   struct employee
   {
     int code;
     float salary;
     char name[30];
   };
+int main() {
 
   struct employee e1,e2,e3;
   e1.code=1;
