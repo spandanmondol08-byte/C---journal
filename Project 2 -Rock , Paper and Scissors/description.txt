@@ -1,0 +1,5 @@
+                        PROJECT 2: ROCK, PAPER AND SCISSORS
+
+Rock, paper, scissors is a game most of us have played during school time. (I sometimes play it even now). Write a C program capable of playing this game with you. Your program should be able to print the result after you choose Rock, paper or scissors.
+
+        
