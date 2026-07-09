@@ -1,18 +1,16 @@
 #include <stdio.h>
 #include <time.h>
-
-void fill_time(char *buffer)
+void gettime()
 {
-  time_t raw_time;
-  struct tm * current_time;
-  time(& raw_time);
-  current_time=localtime(&raw_time);
-  strftime(buffer,50,"%I:%M:%S %p",current_time);
+  
 }
+
+
 int main() {
-  char time [50];
-  fill_time(time);
-  printf("Current time : %s",time);
+  int ch;
+  printf("Enter 1 for 12 hrs / Enter 2 for 24 hrs format : ");
+  scanf("%d",&ch);
+
 
   return 0;
 }
