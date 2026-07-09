@@ -1,16 +1,17 @@
 #include <stdio.h>
 #include <time.h>
-
+#include <unistd.h>
+#include <stdlib.h>
 
 struct tm *current_time;
-void gettime_1()
+void gettime_2()
 {
   time_t raw_time;
   time(&raw_time);
   current_time = localtime(&raw_time);
-  printf("Current time : %02d:%02d:%02d", current_time->tm_hour, current_time->tm_min, current_time->tm_sec);
+  printf("Current time : %02d:%02d:%02d\n", current_time->tm_hour, current_time->tm_min, current_time->tm_sec);
 }
-void gettime_2()
+void gettime_1()
 {
   int hour;
   time_t raw_time;
@@ -34,7 +35,7 @@ void gettime_2()
 
 void ampm()
 {
-  if (current_time->tm_hour>=12)
+  if (current_time->tm_hour >= 12)
   {
     printf(" PM\n");
   }
@@ -48,24 +49,48 @@ void getdate()
   char mon[10];
   char wd[10];
   char *months[] = {
-    "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-  
-  int year=current_time->tm_year+1900;
+      "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+
+  int year = current_time->tm_year + 1900;
 
   char *weeks[] = {
-    "Sunday","Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-  
-    printf("Current date : %s %02d %s, %d",weeks[current_time->tm_wday],current_time->tm_mday,months[current_time->tm_mon],year);
+      "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
+  printf("Current date : %s %02d %s, %d\n", weeks[current_time->tm_wday], current_time->tm_mday, months[current_time->tm_mon], year);
 }
 
 int main()
 {
-  /*int ch;
-  printf("Enter 1 for 12 hrs / Enter 2 for 24 hrs format : ");
-  scanf("%d", &ch);*/
-  gettime_2();
-  ampm();
-  getdate();
+  int ch;
+  printf("Enter 1 for 12 hrs(default) / Enter 2 for 24 hrs format : ");
+  scanf("%d", &ch);
+  while (1)
+  {
+
+    if (ch == 1)
+    {
+      system("cls");
+      gettime_1();
+      ampm();
+      getdate();
+      sleep(1);
+    }
+    else if (ch == 2)
+    {
+      system("cls");
+      gettime_2();
+      getdate();
+      sleep(1);
+    }
+    else
+    {
+      system("cls");
+      gettime_1();
+      ampm();
+      getdate();
+      sleep(1);
+    }
+  }
+
   return 0;
 }
