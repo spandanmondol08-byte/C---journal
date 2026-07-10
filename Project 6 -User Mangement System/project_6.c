@@ -20,7 +20,7 @@ void inputPassword(char password[])
         i--;
         printf("\b \b");
       }
-    else if (ch != '\b')
+    else if (ch != '\b' && i < 29)
       {
         password[i++] = ch;
         printf("*");
@@ -84,7 +84,7 @@ void login(user_list users[3],int uno)
 int main() {
   printf("-----------------------------WELCOME------------------------------\n");
   int uno = 0;
-  user_list users[3];
+  user_list users[30];
 
   while (1)
   {
@@ -98,7 +98,7 @@ int main() {
     scanf("%d",&ch);
     if (ch==1)
     {
-      if (uno==3)
+      if (uno==30)
       {
         printf("Exceeded maximum limit for number of registration\n");
         sleep(1);
