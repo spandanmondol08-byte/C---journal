@@ -1,45 +1,75 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
+
+typedef struct task_progress_bar
+{
+  int id;
+  int step;
+  int progress;
+} pbar;
 
 int main()
 {
-  int t_com_per = 0;
-  int step = 3;
-  int limit = 100 % 3;
-  const int bar_lenght = 100;
-  int id = 1;
+  srand(time(NULL));
+  const int bar_lenght = 50;
+  pbar task[5] = {
+      {1, rand() % 5 + 1, 0},
+      {2, rand() % 5 + 1, 0},
+      {3, rand() % 5 + 1, 0},
+      {4, rand() % 5 + 1, 0},
+      {5, rand() % 5 + 1, 0}};
+
   while (1)
   {
+    int c = 0;
     system("cls");
-    int bar_com_per = (bar_lenght * t_com_per) / 100;
-    printf("Task %d : [", id);
-    for (int i = 0; i < bar_lenght; i++)
+    for (int i = 0; i < 5; i++)
     {
-      if (i < bar_com_per)
+      if (task[i].progress + task[i].step >= 100)
       {
-        printf("=");
+        task[i].progress = 100;
       }
       else
       {
-        printf(" ");
+        task[i].progress = task[i].progress + task[i].step;
+      }
+      int bar_com_per = (bar_lenght * task[i].progress) / 100;
+      printf("Task %d : [", task[i].id);
+
+      for (int j = 0; j < bar_lenght; j++)
+      {
+        if (j < bar_com_per)
+        {
+          printf("=");
+        }
+        else
+        {
+          printf(" ");
+        }
+      }
+      if (task[i].progress == 100)
+      {
+        printf("] %3d%%  DONE\n", task[i].progress);
+      }
+      else
+      {
+        printf("] %3d%%\n", task[i].progress);
+      }
+      if (task[i].progress == 100)
+      {
+        c++;
       }
     }
-    printf("] %d%%\n", t_com_per);
-    sleep(1);
-    if (t_com_per < (100 - limit))
+    if (c == 5)
     {
-      t_com_per = t_com_per + step;
-    }
-    else if (t_com_per == 100)
-    {
+      printf("ALL TASKS COMPLETED !!!");
       break;
     }
-    else
-    {
-      t_com_per = t_com_per + limit;
-    }
+    sleep(1);
   }
 
   return 0;
 }
+
