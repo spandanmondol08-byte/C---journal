@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <conio.h>
+#include <unistd.h>
 
 typedef struct User_List
 {
@@ -57,11 +58,13 @@ void login(user_list users[3],int uno)
       if (strcmp(login_pw,users[i].password)==0)
       {
         printf("You are logged in successfully !!!\n");
+        sleep(1);
         return;
       }
       else
       {
         printf("Invalid Password!!!\n");
+        sleep(1);
         return;
       }  
     }
@@ -73,6 +76,7 @@ void login(user_list users[3],int uno)
   if (found!=0)
   {
     printf("Username not found !!!!\n");
+    sleep(1);
   }
   
 }
@@ -97,12 +101,14 @@ int main() {
       if (uno==3)
       {
         printf("Exceeded maximum limit for number of registration\n");
+        sleep(1);
       }
       else
       {
       registration(users , uno);
       printf("Successfully Registered !!!\n");
       uno++;
+      sleep(1);
       }
       
     }
@@ -111,6 +117,7 @@ int main() {
       if (uno==0)
       {
         printf("No Records stored yet !!!\n");
+        sleep(1);
       }
       else
       {
@@ -121,11 +128,13 @@ int main() {
     else if (ch==3)
     {
       printf("EXITING!!!!!\n");
+      sleep(1);
       break;
     }
     else
     {
       printf("Enter a valid choice !!!\n");
+      sleep(1);
     }
   }
   
