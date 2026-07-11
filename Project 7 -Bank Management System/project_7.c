@@ -116,10 +116,14 @@ int main()
   int ch;
   while (1)
   {
+    printf("---------------------------------\n");
+    printf("          BANKING SYSTEM         \n");
+    printf("---------------------------------\n");
     printf("1) Create Account\n");
     printf("2) Withdraw Money\n");
     printf("3) Deposit Money\n");
     printf("4) EXIT!!!\n");
+    printf("---------------------------------\n");
     printf("Enter your choice : ");
     scanf("%d", &ch);
     fclose(ptr1);
@@ -155,7 +159,8 @@ int main()
     else if (scanf("%d", &ch) != 1)
     {
       printf("Invalid input!\n");
-      while (getchar() != '\n');   // Clear the input buffer
+      while (getchar() != '\n'); 
+      sleep(1);  
       continue;
     }
     else
