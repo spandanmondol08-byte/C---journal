@@ -36,23 +36,44 @@ void decrypter(uac users[30], int n)
 
 void inputPassword(char password[])
 {
-  int i = 0;
-  char ch;
-  while ((ch = getch()) != '\r') // Enter key
+  int choice;
+
+  printf("\n1) Show Password while typing\n");
+  printf("2) Hide Password while typing\n");
+  printf("Enter your choice : ");
+  scanf("%d", &choice);
+  getchar();
+
+  if (choice == 1)
   {
-    if (ch == '\b' && i > 0) // Backspace
-    {
-      i--;
-      printf("\b \b");
-    }
-    else if (ch != '\b' && i < 29)
-    {
-      password[i++] = ch;
-      printf("*");
-    }
+    printf("Enter Password : ");
+    fgets(password, 30, stdin);
+    password[strcspn(password, "\n")] = '\0';
   }
-  password[i] = '\0';
-  printf("\n");
+  else
+  {
+    printf("Enter Password : ");
+
+    int i = 0;
+    char ch;
+
+    while ((ch = getch()) != '\r') 
+    {
+      if (ch == '\b' && i > 0)
+      {
+        i--;
+        printf("\b \b");
+      }
+      else if (ch != '\b' && i < 29)
+      {
+        password[i++] = ch;
+        printf("*");
+      }
+    }
+
+    password[i] = '\0';
+    printf("\n");
+  }
 }
 
 void create_account(uac users[30], int n)
@@ -94,7 +115,6 @@ void create_account(uac users[30], int n)
   fgets(users[n].account_name_l, 30, stdin);
   users[n].account_name_l[strcspn(users[n].account_name_l, "\n")] = '\0';
   fprintf(ptr, "Last Name: %s\n", users[n].account_name_l);
-  printf("Enter your password : ");
   inputPassword(users[n].password);
   encrypter(users, n);
   fprintf(ptr, "Password: %s\n", users[n].password);
@@ -153,16 +173,13 @@ int login(uac users[30], int n)
       if (account_no == users[i].account_number)
       {
         found = 1;
-
-        printf("Enter the password : ");
         inputPassword(password);
-
         if (strcmp(password, users[i].password) == 0)
         {
           printf("Login Successful!\n");
           printf("Welcome %s!\n", users[i].account_name_f);
           sleep(2);
-          return i; 
+          return i;
         }
         else
         {
@@ -277,7 +294,7 @@ void check(uac users[30], int n)
     printf("Balance: %d\n", users[z].account_balance);
     printf("Recent Transaction: %d\n", users[z].trans);
     printf("---------------------------------\n");
-    
+
     printf("Enter any key to exit : ");
     char c;
     getchar();
@@ -303,10 +320,17 @@ int main()
     fscanf(ptr3, "%d\nFirst Name: %s\nLast Name: %s\nPassword: %s\nAccount Number: %d\nAccount Balance: %d\nRecent Transaction: %d\n---------------------------------\n\n", &users[i].id, users[i].account_name_f, users[i].account_name_l, users[i].password, &users[i].account_number, &users[i].account_balance, &users[i].trans);
     decrypter(users, i);
   }
-  fclose(ptr3);
+  
   int ch;
   while (1)
   {
+    ptr3 = fopen("Bank_Info.txt", "r");
+    for (int i = 0; i < n; i++)
+    {
+      fscanf(ptr3, "%d\nFirst Name: %s\nLast Name: %s\nPassword: %s\nAccount Number: %d\nAccount Balance: %d\nRecent Transaction: %d\n---------------------------------\n\n", &users[i].id, users[i].account_name_f, users[i].account_name_l, users[i].password, &users[i].account_number, &users[i].account_balance, &users[i].trans);
+      decrypter(users, i);
+    }
+    fclose(ptr3);
     printf("---------------------------------\n");
     printf("          BANKING SYSTEM         \n");
     printf("---------------------------------\n");
