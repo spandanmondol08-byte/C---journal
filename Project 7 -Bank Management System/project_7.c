@@ -8,7 +8,8 @@
 typedef struct user_accounts
 {
   int id;
-  char account_name[30];
+  char account_name_f[30];
+  char account_name_l[30];
   char password[30];
   int account_number;
   int account_balance;
@@ -83,36 +84,111 @@ void create_account(uac users[30], int n)
   ptr = fopen("Bank_Info.txt", "a");
   users[n].id=n+1;
   fprintf(ptr, "%d\n", users[n].id);
-  printf("Enter the name of account holder : ");
+  printf("Enter the first name of account holder : ");
   getchar();
-  fgets(users[n].account_name, 30, stdin);
-  users[n].account_name[strcspn(users[n].account_name, "\n")] = '\0';
-  fprintf(ptr, "Name: %s\n", users[n].account_name);
+  fgets(users[n].account_name_f, 30, stdin);
+  users[n].account_name_f[strcspn(users[n].account_name_f, "\n")] = '\0';
+  fprintf(ptr, "First Name: %s\n", users[n].account_name_f);
+  printf("Enter the last name of account holder : ");
+  fgets(users[n].account_name_l, 30, stdin);
+  users[n].account_name_l[strcspn(users[n].account_name_l, "\n")] = '\0';
+  fprintf(ptr, "Last Name: %s\n", users[n].account_name_l);
   printf("Enter your password : ");
   inputPassword(users[n].password);
   encrypter(users,n);
   fprintf(ptr, "Password: %s\n", users[n].password);
-  fprintf(ptr, "Account Number : %d\n", users[n].account_number);
-  fprintf(ptr, "Account Balance : %d\n", users[n].account_balance);
-  fprintf(ptr, "---------------------------------\n");
+  fprintf(ptr, "Account Number: %d\n", users[n].account_number);
+  fprintf(ptr, "Account Balance: %d\n", users[n].account_balance);
+  fprintf(ptr,"---------------------------------\n");
   fprintf(ptr, "\n");
   fclose(ptr);
   printf("\nAccount created successfully!\n\n");
   printf("---------------------------------\n");
-  printf("Account Holder Name : %s\n", users[n].account_name);
+  printf("Account Holder Name : %s %s\n", users[n].account_name_f,users[n].account_name_l);
   printf("Account Number : %d\n", users[n].account_number);
-  printf("Balance        : %d\n", users[n].account_balance);
+  printf("Balance: %d\n", users[n].account_balance);
   printf("---------------------------------\n");
   sleep(2);
 }
 
+int login(uac users[30],int n)
+{
+  while (1)
+  {
+    int lac;
+    printf("Enter your account number : ");
+    scanf("%d",&lac);
+    int f=0;
+    for(int i=0;i<n;i++)
+    {
+      if(lac=users[i].account_number)
+      {
+        char lp[30];
+        printf("Enter the Password : ");
+        inputPassword(lp);
+        if (lp=users[i].password)
+        {
+          printf("You are logged in !!\n");
+          break;
+        }
+        else
+        {
+          f=1;
+          break;
+        }
+      }
+      else
+      {
+        f=1;
+      }
+    }
+    if (f==1)
+    {
+      int x ;
+      printf("Try again ?\n");
+      printf("Enter 1 to TRY AGAIN and 2 to go back to MAIN MENU :");
+      scanf("%d",&x);
+      if (x==1)
+      {
+        sleep(1);
+        continue;
+      }
+      else if (x==2)
+      {
+        return m;
+      }
+      else
+      {
+        printf("Invalid Input !!! going back to MAIN MENU\n");
+        return m;
+      }
+    }
+    else
+    {
+      return con;
+    }
+  }
+}
+
+// MAIN 
+
 int main()
 {
+  srand(time(NULL));
   uac users[30];
   int n;
   FILE *ptr1;
   ptr1=fopen("userno.txt","r");
   fscanf(ptr1,"%d",&n);
+  fclose(ptr1);
+  FILE *ptr3;
+  ptr3=fopen("Bank_Info.txt","r");
+  for (int i = 0 ; i < n ; i++)
+  {
+   fscanf(ptr3,"%d\nFirst Name: %s\nLast Name: %s\nPassword: %s\nAccount Number: %d\nAccount Balance: %d\n---------------------------------\n\n",&users[i].id,users[i].account_name_f,users[i].account_name_l,users[i].password,&users[i].account_number,&users[i].account_balance);
+   decrypter(users,i);
+  }
+  fclose(ptr3);
   int ch;
   while (1)
   {
@@ -126,8 +202,8 @@ int main()
     printf("---------------------------------\n");
     printf("Enter your choice : ");
     scanf("%d", &ch);
-    fclose(ptr1);
     sleep(1);
+
     if (ch == 1)
     {
       if (n == 30)
@@ -136,13 +212,12 @@ int main()
       }
       else
       {
-        srand(time(NULL));
         create_account(users, n);
         n++;
-        FILE *ptr1;
-        ptr1=fopen("userno.txt","w");
-        fprintf(ptr1,"%d",n);
-        fclose(ptr1);
+        FILE *ptr2;
+        ptr2=fopen("userno.txt","w");
+        fprintf(ptr2,"%d",n);
+        fclose(ptr2);
       }
     }
     else if (ch == 2)
@@ -154,14 +229,8 @@ int main()
     else if (ch == 4)
     {
       printf("EXITING !!!\n");
+      sleep(1);
       break;
-    }
-    else if (scanf("%d", &ch) != 1)
-    {
-      printf("Invalid input!\n");
-      while (getchar() != '\n'); 
-      sleep(1);  
-      continue;
     }
     else
     {
