@@ -88,29 +88,52 @@ int valid_move(int puzzle[9][9],int row,int column,int value)
  return 1;
 }
 
+int solver(int puzzle[9][9],int row , int column)
+{
+  if (column==9 & row==8)
+  {
+    return 1 ;
+  }
+  if (column==9)
+  {
+    row++;
+    column=0;
+  }
+  if (puzzle[row][column]>0)
+  {
+    return solver(puzzle,row,column+1);
+  }
+
+  for(int i = 1 ; i<=9 ; i++)
+  {
+    if (valid_move(puzzle,row,column,i))
+    {
+      puzzle[row][column]=i;
+      if(solver(puzzle,row,column+1))
+      {
+        return 1;
+      }
+      puzzle[row][column]=0;
+    }
+  }
+  return 0;
+}
+
 // MAIN
 
 int main()
 {
+  printf("\n\n              Welcome to Sudoku Solver            \n\n");
+  printf("Original Sudoku : ");
   print_puzzle(puzzle);
-  while (1)
+  if (solver(puzzle,0,0))
   {
-    for ( int i = 0 ; i < 9 ; i++)
-    {
-      for ( int j =0 ; j < 9 ; j++)
-      {
-        int val =0;
-        if (valid_move(puzzle,i,j,val)==0)
-        {
-          val++;
-        }
-        else
-        {
-          puzzle[i][j]==val;
-        }
-      }
-    }
+    printf("\nSolved Sudoku : ");
+    print_puzzle(puzzle);
   }
-  
+  else
+  {
+    printf("The Sudoku is not solvable !!!!\n");
+  }
   return 0;
 }
