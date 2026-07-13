@@ -1,5 +1,11 @@
 #include <stdio.h>
 
+char board[3][3] = {
+  {' ',' ',' '},
+  {' ',' ',' '},
+  {' ',' ',' '}
+}
+
 void select_dif()
 {
   while (1)
@@ -33,14 +39,29 @@ void select_dif()
   }
 }
 
-void print_board()
+void print_board(board[3][3])
 {
   printf("Score - Player X: %d, Computer: %d, Draw: %d");
-
+  for (int i =0 ; i < 3 ; i++)
+  {
+    for (int j=0;j<3;j++)
+    {
+      if (j%3==0)
+      {
+        printf("%c",board[i][j]);
+      }
+      else
+      {
+        printf("|");
+        printf("%c",board[i][j]);
+      }
+    }
+  }
 }
 
 int main() {
   select_dif();
-
+  print_board(board);
+  
   return 0;
 }
