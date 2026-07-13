@@ -64,8 +64,57 @@ void print_board(char board[3][3])
   }
 }
 
-void check(){
-  
+int check(char board[3][3],int row,int column)
+{
+  int c=0;
+  for (int i =0 ; i<2;i++)
+  {
+    if(board[row][i]==board[row][i+1])
+    {
+      c++;
+    }
+  }
+  if (c==2)
+  {
+    return 1;
+  }
+  else
+  {
+    c=0;
+  }
+  for (int i =0 ; i<2;i++)
+  {
+    if(board[i][column]==board[i+1][column])
+    {
+      c++;
+    }
+  }
+  if (c==2)
+  {
+    return 1;
+  }
+  else
+  {
+    c=0;
+  }
+  if (row=column)
+  {
+    for (int i = 0; i < 2; i++)
+    {
+      if (board[row][column]==board[row+1][column+1])
+      {
+        c++;
+      }
+    } 
+  }
+  if (c==2)
+  {
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
 }
 
 int main() {
