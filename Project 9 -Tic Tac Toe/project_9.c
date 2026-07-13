@@ -1,11 +1,10 @@
 #include <stdio.h>
 
 char board[3][3] = {
-  {' ',' ',' '},
-  {' ',' ',' '},
-  {' ',' ',' '}
-};
-int ps=0,cs=0,ds=0;
+    {'X', ' ', ' '},
+    {' ', 'X', ' '},
+    {' ', ' ', 'X'}};
+int ps = 0, cs = 0, ds = 0;
 
 void select_dif()
 {
@@ -18,15 +17,13 @@ void select_dif()
     printf("3. EXIT!!!\n\n");
     int ch;
     printf("Enter your choice : ");
-    scanf("%d",&ch);
+    scanf("%d", &ch);
 
-    if(ch == 1)
+    if (ch == 1)
     {
-
-    } 
+    }
     else if (ch == 2)
     {
-
     }
     else if (ch == 3)
     {
@@ -42,83 +39,78 @@ void select_dif()
 
 void print_board(char board[3][3])
 {
-  printf("Score - Player X: %d, Computer: %d, Draw: %d\n\n",ps,cs,ds);
-  for (int i =0 ; i < 3 ; i++)
+  printf("Score - Player X: %d, Computer: %d, Draw: %d\n\n", ps, cs, ds);
+  for (int i = 0; i < 3; i++)
   {
-    for (int j=0;j<3;j++)
+    for (int j = 0; j < 3; j++)
     {
-      if (j%3==0)
+      if (j % 3 == 0)
       {
-        printf(" %c ",board[i][j]);
+        printf(" %c ", board[i][j]);
       }
       else
       {
         printf(" | ");
-        printf(" %c ",board[i][j]);
+        printf(" %c ", board[i][j]);
       }
     }
-    if (i==0 || i==1)
+    if (i == 0 || i == 1)
     {
       printf("\n----+-----+----\n");
     }
   }
 }
 
-int check(char board[3][3],int row,int column)
+int check(char board[3][3], int row, int column)
 {
-  int c=0;
-  for (int i =0 ; i<2;i++)
+  // Check row
+
+  if (board[row][0] != ' ' &&
+      board[row][0] == board[row][1] &&
+      board[row][1] == board[row][2])
   {
-    if(board[row][i]==board[row][i+1])
+    return 1;
+  }
+
+  // Check column
+
+  if (board[0][column] != ' ' &&
+      board[0][column] == board[1][column] &&
+      board[1][column] == board[2][column])
+  {
+    return 1;
+  }
+
+  // Check main diagonal
+
+  if (row == column)
+  {
+    if (board[0][0] != ' ' &&
+        board[0][0] == board[1][1] &&
+        board[1][1] == board[2][2])
     {
-      c++;
+      return 1;
     }
   }
-  if (c==2)
+
+  // Check anti-diagonal
+  
+  if (row + column == 2)
   {
-    return 1;
-  }
-  else
-  {
-    c=0;
-  }
-  for (int i =0 ; i<2;i++)
-  {
-    if(board[i][column]==board[i+1][column])
+    if (board[0][2] != ' ' &&
+        board[0][2] == board[1][1] &&
+        board[1][1] == board[2][0])
     {
-      c++;
+      return 1;
     }
   }
-  if (c==2)
-  {
-    return 1;
-  }
-  else
-  {
-    c=0;
-  }
-  if (row=column)
-  {
-    for (int i = 0; i < 2; i++)
-    {
-      if (board[row][column]==board[row+1][column+1])
-      {
-        c++;
-      }
-    } 
-  }
-  if (c==2)
-  {
-    return 1;
-  }
-  else
-  {
-    return 0;
-  }
+
+  return 0;
 }
 
-int main() {
-  select_dif();
+int main()
+{
+  // select_dif();
   print_board(board);
 
   return 0;
