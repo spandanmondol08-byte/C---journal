@@ -1,9 +1,11 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 char board[3][3] = {
-    {'X', ' ', ' '},
-    {' ', 'X', ' '},
-    {' ', ' ', 'X'}};
+    {' ', ' ', ' '},
+    {' ', ' ', ' '},
+    {' ', ' ', ' '}};
 int ps = 0, cs = 0, ds = 0;
 
 void select_dif()
@@ -61,6 +63,76 @@ void print_board(char board[3][3])
   }
 }
 
+void play_game(char board[3][3])
+{
+  int row;
+  int column;
+  int j = 0;
+  int store[9][2];
+  for (int i = 0; i < 9; i++)
+{
+    store[i][0] = -1;
+    store[i][1] = -1;
+}
+  int turn = rand() % 10 + 1;
+  while (1)
+  {
+    if (turn % 2 == 0)
+    {
+      printf("\n\nPlayer X's turn\n");
+      printf("Enter the row and column 1 to 3 (with a space) : ");
+      while (1)
+      {
+        scanf("%d %d", &row, &column);
+        for (int i = 0; i < 9; i++)
+        {
+          if (store[i][0] == (row - 1) && store[i][1] == (column - 1))
+          {
+            printf("Already Entered Move !!!");
+          }
+          else
+          {
+            store[j][0] = (row - 1);
+            store[j][1] = (column - 1);
+            board[row - 1][column - 1] = 'X';
+            break;
+          }
+        }
+      }
+      system("cls");
+      print_board(board);
+      turn = 1;
+      j++;
+    }
+    else
+    {
+      row = rand() % 3;
+      column = rand() % 3;
+      while (1)
+      {
+        scanf("%d %d", &row, &column);
+        for (int i = 0; i < 9; i++)
+        {
+          if (store[i][0] == row && store[i][1] == column)
+          {
+          }
+          else
+          {
+            store[j][0] = row;
+            store[j][1] = column;
+            board[row][column] = 'O';
+            break;
+          }
+        }
+      }
+      system("cls");
+      print_board(board);
+      turn = 2;
+      j++;
+    }
+  }
+}
+
 int check(char board[3][3], int row, int column)
 {
   // Check row
@@ -94,7 +166,7 @@ int check(char board[3][3], int row, int column)
   }
 
   // Check anti-diagonal
-  
+
   if (row + column == 2)
   {
     if (board[0][2] != ' ' &&
@@ -110,8 +182,10 @@ int check(char board[3][3], int row, int column)
 
 int main()
 {
+  srand(time(NULL));
   // select_dif();
   print_board(board);
+  play_game(board);
 
   return 0;
 }
