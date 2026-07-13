@@ -2,210 +2,294 @@
 #include <stdlib.h>
 #include <time.h>
 
-int ps = 0, cs = 0, ds = 0;
+#define BOARD_SIZE 3
+#define X 'X'
+#define O 'O'
 
-void print_board(char board[3][3])
-{
-  printf("Score - Player X: %d, Computer: %d, Draw: %d\n\n", ps, cs, ds);
+typedef struct {
+  int player;
+  int computer;
+  int draw;
+} Score;
 
-  for (int i = 0; i < 3; i++)
-  {
-    for (int j = 0; j < 3; j++)
-    {
-      if (j == 0)
-        printf(" %c ", board[i][j]);
-      else
-        printf(" | %c ", board[i][j]);
-    }
+int difficulty;
+Score score = {.player = 0, .computer = 0, .draw = 0};
 
-    if (i != 2)
-      printf("\n----+----+----\n");
-  }
-  printf("\n");
-}
+void input_difficulty();
+void clear_screen();
+void print_board(char board[BOARD_SIZE][BOARD_SIZE]);
+int check_win(char board[BOARD_SIZE][BOARD_SIZE], char player);
+int check_draw(char board[BOARD_SIZE][BOARD_SIZE]);
+void play_game();
+void player_move(char board[BOARD_SIZE][BOARD_SIZE]);
+void computer_move(char board[BOARD_SIZE][BOARD_SIZE]);
+int is_valid_move(char board[BOARD_SIZE][BOARD_SIZE], int row, int col);
 
-int check(char board[3][3], int row, int column)
-{
-  // Check row
-
-  if (board[row][0] != ' ' &&
-      board[row][0] == board[row][1] &&
-      board[row][1] == board[row][2])
-  {
-    return 1;
-  }
-
-  // Check column
-
-  if (board[0][column] != ' ' &&
-      board[0][column] == board[1][column] &&
-      board[1][column] == board[2][column])
-  {
-    return 1;
-  }
-
-  // Check main diagonal
-
-  if (row == column)
-  {
-    if (board[0][0] != ' ' &&
-        board[0][0] == board[1][1] &&
-        board[1][1] == board[2][2])
-    {
-      return 1;
-    }
-  }
-
-  // Check anti-diagonal
-
-  if (row + column == 2)
-  {
-    if (board[0][2] != ' ' &&
-        board[0][2] == board[1][1] &&
-        board[1][1] == board[2][0])
-    {
-      return 1;
-    }
-  }
-
-  return 0;
-}
-
-void play_game(char board[3][3])
-{
-  int row;
-  int column;
-  int turn = rand() % 10 + 1;
-  while (1)
-  {
-    int c = 0;
-    if (turn % 2 == 0)
-    {
-      printf("\n\nPlayer X's turn\n");
-
-      while (1)
-      {
-        printf("Enter the row and column 1 to 3 (with a space) : ");
-        scanf("%d %d", &row, &column);
-        if (row > 3 || column > 3 || row < 1 || column < 1 || board[row - 1][column - 1] != ' ')
-        {
-          printf("Invalid Input!!!\n");
-        }
-        else
-        {
-          break;
-        }
-      }
-      board[row - 1][column - 1] = 'X';
-      system("cls");
-      print_board(board);
-      if (check(board, row - 1, column - 1))
-      {
-        printf("\n\nPlayer X Wins!\n\n");
-        c = 9;
-        ps++;
-        break;
-      }
-
-      turn = 1;
-    }
-    else
-    {
-      while (1)
-      {
-        row = rand() % 3;
-        column = rand() % 3;
-        if (board[row][column] == ' ')
-        {
-          break;
-        }
-      }
-      board[row][column] = 'O';
-      system("cls");
-      print_board(board);
-      if (check(board, row, column))
-      {
-        printf("\nComputer Wins!\n");
-        cs++;
-        c = 9;
-        break;
-      }
-
-      turn = 2;
-    }
-    for (int i = 0; i < 3; i++)
-    {
-      for (int j = 0; j < 3; j++)
-      {
-        if (board[i][j] != ' ')
-        {
-          c++;
-        }
-      }
-    }
-    if (c == 9)
-    {
-      printf("\n\nDraw!!!\n\n");
-      ds++;
-      break;
-    }
-  }
-}
-
-int main()
-{
+int main() {
   srand(time(NULL));
-  while (1)
-  {
-    char board[3][3] = {
-        {' ', ' ', ' '},
-        {' ', ' ', ' '},
-        {' ', ' ', ' '}};
-    printf("\n\n               TIC TAC TOE                \n\n");
-    printf("Select difficulty level\n");
-    printf("1. Normal Mode (Standard)\n");
-    printf("2. God Mode (Impossible to win)\n");
-    printf("3. EXIT!!!\n\n");
-    int ch;
-    printf("Enter your choice : ");
-    scanf("%d", &ch);
+  int choice;
+  input_difficulty();
+  do {
+    play_game();
+    printf("\nPlay again? (1 for yes, 0 for no): ");
+    scanf("%d", &choice);
+  } while (choice == 1);
+  printf("\nBye Bye, thanks for playing.");
+}
 
-    if (ch == 1)
-    {
-      while (1)
-      {
-        char board[3][3] = {
-            {' ', ' ', ' '},
-            {' ', ' ', ' '},
-            {' ', ' ', ' '}};
+void play_game() {
+  char board[BOARD_SIZE][BOARD_SIZE] = {
+    {' ', ' ', ' '},
+    {' ', ' ', ' '},
+    {' ', ' ', ' '},
+  };
+  char current_player = rand() % 2 == 0 ? X : O;
+
+  print_board(board);
+  while (1) {
+    if (current_player == X) {
+      player_move(board);
+      print_board(board);
+      if (check_win(board, X)) {
+        score.player++;
         print_board(board);
-        play_game(board);
-        int x;
-        printf("Enter 1 to play again or 2 to go back to main menu : ");
-        scanf("%d", &x);
-        if (x == 2)
-        {
-          ps = 0;
-          cs = 0;
-          ds = 0;
-          break;
-        }
-        system("cls");
+        printf("Congratulation You have won.!!!");
+        break;
       }
+      current_player = O;
+    } else {
+      computer_move(board);
+      print_board(board);
+      if (check_win(board, O)) {
+        score.computer++;
+        print_board(board);
+        printf("I won !!! But you played well...");
+        break;
+      }
+      current_player = X;
     }
-    else if (ch == 2)
-    {
-    }
-    else if (ch == 3)
-    {
-      printf("EXITING !!!");
+
+    if (check_draw(board)) {
+      score.draw++;
+      print_board(board);
+      printf("\nIt's a draw!");
       break;
     }
-    else
-    {
-      printf("Invalid Input!!!");
+  }
+}
+
+int is_valid_move(char board[BOARD_SIZE][BOARD_SIZE], int row, int col) {
+  return !(row < 0 || col < 0 ||
+           row > 2 || col > 2 ||
+           board[row][col] != ' ');
+}
+
+void player_move(char board[BOARD_SIZE][BOARD_SIZE]) {
+  int count = 0, x, y;
+  for (int i = 0; i < BOARD_SIZE; i++) {
+    for (int j = 0; j < BOARD_SIZE; j++) {
+      if (board[i][j] == ' ') {
+        count++;
+        x = i;
+        y = j;
+      }
     }
   }
 
+  if (count == 1) {
+    board[x][y] = X;
+    return;
+  }
+  
+  int row, col;
+  do {
+    printf("\nPlayer X's turn.");
+    printf("\nEnter row and column (1-3) for X: ");
+    scanf("%d", &row);
+    scanf("%d", &col);
+    row--; col--; // converting to zero based
+  } while (!is_valid_move(board, row, col));
+  board[row][col] = X;
+}
+
+// Minimax for God mode: O is the maximizing computer, X is the player.
+// Returns a score relative to O: +10 - depth for an O win (prefer faster wins),
+// depth - 10 for an X win (prefer slower losses), 0 for a draw.
+int minimax(char board[BOARD_SIZE][BOARD_SIZE], int depth, int is_maximizing) {
+  if (check_win(board, O)) {
+    return 10 - depth;
+  }
+  if (check_win(board, X)) {
+    return depth - 10;
+  }
+  if (check_draw(board)) {
+    return 0;
+  }
+
+  if (is_maximizing) {
+    int best = -1000;
+    for (int i = 0; i < BOARD_SIZE; i++) {
+      for (int j = 0; j < BOARD_SIZE; j++) {
+        if (board[i][j] == ' ') {
+          board[i][j] = O;
+          int sc = minimax(board, depth + 1, 0);
+          board[i][j] = ' ';
+          if (sc > best) {
+            best = sc;
+          }
+        }
+      }
+    }
+    return best;
+  } else {
+    int best = 1000;
+    for (int i = 0; i < BOARD_SIZE; i++) {
+      for (int j = 0; j < BOARD_SIZE; j++) {
+        if (board[i][j] == ' ') {
+          board[i][j] = X;
+          int sc = minimax(board, depth + 1, 1);
+          board[i][j] = ' ';
+          if (sc < best) {
+            best = sc;
+          }
+        }
+      }
+    }
+    return best;
+  }
+}
+
+void computer_move(char board[BOARD_SIZE][BOARD_SIZE]) {
+  // GOD Mode: play the optimal move via minimax (unbeatable).
+  if (difficulty == 2) {
+    int best_score = -1000, best_row = -1, best_col = -1;
+    for (int i = 0; i < BOARD_SIZE; i++) {
+      for (int j = 0; j < BOARD_SIZE; j++) {
+        if (board[i][j] == ' ') {
+          board[i][j] = O;
+          int sc = minimax(board, 0, 0);
+          board[i][j] = ' ';
+          if (sc > best_score) {
+            best_score = sc;
+            best_row = i;
+            best_col = j;
+          }
+        }
+      }
+    }
+    if (best_row != -1) {
+      board[best_row][best_col] = O;
+      return;
+    }
+  }
+
+  // 1. Play for Immediate win
+  for (int i = 0; i < BOARD_SIZE; i++) {
+    for (int j = 0; j < BOARD_SIZE; j++) {
+      if (board[i][j] == ' ') {
+        board[i][j] = O;
+        if (check_win(board, O)) {
+          return;
+        }
+        board[i][j] = ' ';
+      }
+    }
+  }
+
+  // 2. Play for Immediate Block
+  for (int i = 0; i < BOARD_SIZE; i++) {
+    for (int j = 0; j < BOARD_SIZE; j++) {
+      if (board[i][j] == ' ') {
+        board[i][j] = X;
+        if (check_win(board, X)) {
+          board[i][j] = O;
+          return;
+        }
+        board[i][j] = ' ';
+      }
+    }
+  }
+
+  // 3. Play first available move
+  for (int i = 0; i < BOARD_SIZE; i++) {
+    for (int j = 0; j < BOARD_SIZE; j++) {
+      if (board[i][j] == ' ') {
+        board[i][j] = O;
+        return;
+      }
+    }
+  }
+}
+
+int check_win(char board[BOARD_SIZE][BOARD_SIZE], char player) {
+  for (int i = 0; i < BOARD_SIZE; i++) {
+    if (board[i][0] == player && board[i][1] == player && board[i][2] == player) {
+      return 1;
+    }
+
+    if (board[0][i] == player && board[1][i] == player && board[2][i] == player) {
+      return 1;
+    }
+  }
+
+  if ((board[0][0] == player && board[1][1] == player && board[2][2] == player) ||
+      (board[2][0] == player && board[1][1] == player && board[0][2] == player)) {
+    return 1;
+  }
   return 0;
+}
+
+int check_draw(char board[BOARD_SIZE][BOARD_SIZE]) {
+  for (int i = 0; i < BOARD_SIZE; i++) {
+    for (int j = 0; j < BOARD_SIZE; j++) {
+      if (board[i][j] == ' ') {
+        return 0;
+      }
+    }
+  }
+  return 1;
+}
+
+void print_board(char board[BOARD_SIZE][BOARD_SIZE]) {
+  clear_screen();
+  printf("Score - Player X: %d, Computer: %d, Draws: %d", score.player, score.computer, score.draw);
+  printf("\nTic-Tac-Toe\n");
+
+  for (int i = 0 ; i < BOARD_SIZE; i++) {
+    printf("\n");
+    for (int j = 0; j < BOARD_SIZE; j++) {
+      printf(" %c ", board[i][j]);
+      if (j < BOARD_SIZE - 1) {
+        printf("|");
+      }
+    }
+    if (i < BOARD_SIZE - 1) {
+      printf("\n---+---+---");
+    }
+  }
+  printf("\n\n");
+}
+
+void input_difficulty() {
+  while (1) {
+    printf("\nSelect difficulty level:");
+    printf("\n1. Human (Standard)");
+    printf("\n2. God (Impossible to win)");
+    printf("\nEnter your choice: ");
+    scanf("%d", &difficulty);
+
+    if (difficulty != 1 && difficulty != 2) {
+      printf("\nIncorrect choice enter (1/2)!!");
+    } else {
+      break;
+    }
+  };
+}
+
+void clear_screen() {
+  #ifdef _Win32
+    system("cls");
+  #else
+    system("clear");
+  #endif    
 }
