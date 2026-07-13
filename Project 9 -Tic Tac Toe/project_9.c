@@ -4,7 +4,8 @@ char board[3][3] = {
   {' ',' ',' '},
   {' ',' ',' '},
   {' ',' ',' '}
-}
+};
+int ps=0,cs=0,ds=0;
 
 void select_dif()
 {
@@ -39,29 +40,37 @@ void select_dif()
   }
 }
 
-void print_board(board[3][3])
+void print_board(char board[3][3])
 {
-  printf("Score - Player X: %d, Computer: %d, Draw: %d");
+  printf("Score - Player X: %d, Computer: %d, Draw: %d\n\n",ps,cs,ds);
   for (int i =0 ; i < 3 ; i++)
   {
     for (int j=0;j<3;j++)
     {
       if (j%3==0)
       {
-        printf("%c",board[i][j]);
+        printf(" %c ",board[i][j]);
       }
       else
       {
-        printf("|");
-        printf("%c",board[i][j]);
+        printf(" | ");
+        printf(" %c ",board[i][j]);
       }
     }
+    if (i==0 || i==1)
+    {
+      printf("\n----+-----+----\n");
+    }
   }
+}
+
+void check(){
+  
 }
 
 int main() {
   select_dif();
   print_board(board);
-  
+
   return 0;
 }
