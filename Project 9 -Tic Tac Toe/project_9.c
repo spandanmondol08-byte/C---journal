@@ -4,28 +4,24 @@
 
 int ps = 0, cs = 0, ds = 0;
 
-void print_board(char board[3][3],int ps,int cs ,int ds)
+void print_board(char board[3][3])
 {
   printf("Score - Player X: %d, Computer: %d, Draw: %d\n\n", ps, cs, ds);
+
   for (int i = 0; i < 3; i++)
   {
     for (int j = 0; j < 3; j++)
     {
-      if (j % 3 == 0)
-      {
+      if (j == 0)
         printf(" %c ", board[i][j]);
-      }
       else
-      {
-        printf(" | ");
-        printf(" %c ", board[i][j]);
-      }
+        printf(" | %c ", board[i][j]);
     }
-    if (i == 0 || i == 1)
-    {
-      printf("\n----+-----+----\n");
-    }
+
+    if (i != 2)
+      printf("\n----+----+----\n");
   }
+  printf("\n");
 }
 
 int check(char board[3][3], int row, int column)
@@ -75,24 +71,23 @@ int check(char board[3][3], int row, int column)
   return 0;
 }
 
-
-void play_game(char board[3][3],int ds,int ps,int cs)
+void play_game(char board[3][3])
 {
   int row;
   int column;
   int turn = rand() % 10 + 1;
-  while(1)
+  while (1)
   {
-    int c=0;
-    if (turn%2==0)
+    int c = 0;
+    if (turn % 2 == 0)
     {
       printf("\n\nPlayer X's turn\n");
-      
-      while(1)
+
+      while (1)
       {
         printf("Enter the row and column 1 to 3 (with a space) : ");
-        scanf("%d %d",&row,&column);
-        if ( row > 3 || column > 3 || row < 1 || column < 1 || board[row-1][column-1]!=' ')
+        scanf("%d %d", &row, &column);
+        if (row > 3 || column > 3 || row < 1 || column < 1 || board[row - 1][column - 1] != ' ')
         {
           printf("Invalid Input!!!\n");
         }
@@ -101,52 +96,54 @@ void play_game(char board[3][3],int ds,int ps,int cs)
           break;
         }
       }
-      board[row-1][column-1]='X';
-      if(check(board, row - 1, column - 1))
+      board[row - 1][column - 1] = 'X';
+      system("cls");
+      print_board(board);
+      if (check(board, row - 1, column - 1))
       {
-        printf("\nPlayer X Wins!\n");
-        c=9;
+        printf("\n\nPlayer X Wins!\n\n");
+        c = 9;
         ps++;
         break;
       }
-      system("cls");
-      print_board(board,cs,ds,ps);
-      turn=1;
+
+      turn = 1;
     }
     else
     {
-      while(1)
+      while (1)
       {
-        row=rand()%3;
-        column=rand()%3;
-        if (board[row][column]==' ')
+        row = rand() % 3;
+        column = rand() % 3;
+        if (board[row][column] == ' ')
         {
           break;
         }
       }
-      board[row][column]='O';
+      board[row][column] = 'O';
+      system("cls");
+      print_board(board);
       if (check(board, row, column))
       {
         printf("\nComputer Wins!\n");
         cs++;
-        c=9;
+        c = 9;
         break;
       }
-      system("cls");
-      print_board(board,cs,ps,ds);
-      turn=2;
+
+      turn = 2;
     }
-    for (int i =0 ; i < 3 ; i++)
+    for (int i = 0; i < 3; i++)
     {
-      for (int j=0 ; j<3; j++)
+      for (int j = 0; j < 3; j++)
       {
-        if (board[i][j]!=' ')
+        if (board[i][j] != ' ')
         {
           c++;
         }
       }
-    } 
-    if(c==9)
+    }
+    if (c == 9)
     {
       printf("\n\nDraw!!!\n\n");
       ds++;
@@ -161,9 +158,9 @@ int main()
   while (1)
   {
     char board[3][3] = {
-    {' ', ' ', ' '},
-    {' ', ' ', ' '},
-    {' ', ' ', ' '}};
+        {' ', ' ', ' '},
+        {' ', ' ', ' '},
+        {' ', ' ', ' '}};
     printf("\n\n               TIC TAC TOE                \n\n");
     printf("Select difficulty level\n");
     printf("1. Normal Mode (Standard)\n");
@@ -178,20 +175,23 @@ int main()
       while (1)
       {
         char board[3][3] = {
-          {' ', ' ', ' '},
-          {' ', ' ', ' '},
-          {' ', ' ', ' '}
-        };
-        print_board(board, ds, ps, cs);
-        play_game(board,ds,ps,cs);
+            {' ', ' ', ' '},
+            {' ', ' ', ' '},
+            {' ', ' ', ' '}};
+        print_board(board);
+        play_game(board);
         int x;
         printf("Enter 1 to play again or 2 to go back to main menu : ");
-        scanf("%d",&x);
-        if(x==2)
+        scanf("%d", &x);
+        if (x == 2)
         {
+          ps = 0;
+          cs = 0;
+          ds = 0;
           break;
         }
-      }  
+        system("cls");
+      }
     }
     else if (ch == 2)
     {
@@ -206,6 +206,6 @@ int main()
       printf("Invalid Input!!!");
     }
   }
-  
+
   return 0;
 }
