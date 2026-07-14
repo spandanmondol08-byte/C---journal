@@ -4,21 +4,16 @@
 #include <time.h>
 #include <windows.h>
 
-typedef struct Direction
-{
-  char up;
-  char down;
-  char right;
-  char left;
-  char stop;
-}direction;
-direction dir;
-int height=20 , width =80;
+int tail_x[100];
+int tail_y[100];
+int tail_length = 0;
+int height=20 , width =60;
 int food_x;
 int food_y;
 int snake_x;
 int snake_y;
 int score = 0;
+int speed = 200;
 void entry();
 void draw();
 void setup();
@@ -38,24 +33,52 @@ void entry()
     if (ch=='w')
     {
       snake_y--;
-      draw();
     }
     else if (ch=='s')
     {
       snake_y++;
-      draw();
     }
     else if (ch=='a')
     {
       snake_x--;
-      draw();
     }
     else if (ch=='d')
     {
       snake_x++;
-      draw();
     }
-    Sleep(1000);
+    if (snake_y < 0)
+    {
+      snake_y = height - 1;
+    }
+
+    if (snake_y >= height)
+    {
+      snake_y = 0;
+    } 
+
+    if (snake_x < 0)
+    {
+      snake_x = width - 1;
+    }
+
+    if (snake_x >= width)
+    {
+      snake_x = 0;
+    }
+
+    if(snake_x==food_x && snake_y==food_y)
+    {
+      score += 10;
+      speed -= 10;
+      if (speed < 50)
+      {
+        speed = 50;
+      }
+      food_x=rand()%width;
+      food_y=rand()%height;
+    }
+    draw();
+    Sleep(speed);
   }
 }
 
@@ -106,11 +129,6 @@ void setup()
   snake_x=width/2;
   food_x=rand()%width;
   food_y=rand()%height;
-}
-
-void game_loop()
-{
-
 }
 
 int main() {
