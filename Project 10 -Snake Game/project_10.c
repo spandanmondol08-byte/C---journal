@@ -2,6 +2,7 @@
 #include <conio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <windows.h>
 
 typedef struct Direction
 {
@@ -18,28 +19,43 @@ int food_y;
 int snake_x;
 int snake_y;
 int score = 0;
-void entry(char);
+void entry();
 void draw();
 void setup();
 void game_loop();
 
-void entry(char ch)
+void entry()
 {
+  char ch='x';
+  setup();
+  draw();
   while (1)
   {
-    int (kbhit())
+    if (kbhit())
     {
       ch = getch();
     }
     if (ch=='w')
     {
       snake_y--;
+      draw();
     }
-    else if (ch=='w')
+    else if (ch=='s')
     {
       snake_y++;
+      draw();
     }
-    
+    else if (ch=='a')
+    {
+      snake_x--;
+      draw();
+    }
+    else if (ch=='d')
+    {
+      snake_x++;
+      draw();
+    }
+    Sleep(1000);
   }
 }
 
@@ -90,7 +106,6 @@ void setup()
   snake_x=width/2;
   food_x=rand()%width;
   food_y=rand()%height;
-
 }
 
 void game_loop()
@@ -100,8 +115,6 @@ void game_loop()
 
 int main() {
   srand(time(NULL));
-  setup();
-  draw();
-  dir.stop;
+  entry();
   return 0;
 }
