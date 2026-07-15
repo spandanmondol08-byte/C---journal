@@ -4,6 +4,8 @@
 ![Projects](https://img.shields.io/badge/Projects-11-success.svg)
 ![Status](https://img.shields.io/badge/Status-Completed-brightgreen.svg)
 ![Learning](https://img.shields.io/badge/Learning-Programming-orange.svg)
+![Level](https://img.shields.io/badge/Level-Beginner_to_Intermediate-brightgreen)
+![GitHub stars](https://img.shields.io/github/stars/spandanmondol08-byte/C---journal?style=social)
 
 A collection of my C programming journey—from learning the fundamentals to building complete console-based projects.
 
