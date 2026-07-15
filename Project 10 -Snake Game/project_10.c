@@ -37,7 +37,7 @@ void hideCursor()
 }
 void entry()
 {
-  char ch = 'w';
+  char ch = 'x';
   setup();
   draw();
   while (1)
