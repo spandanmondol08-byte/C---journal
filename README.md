@@ -1,5 +1,10 @@
 # C Programming Journal
 
+![Language](https://img.shields.io/badge/Language-C-blue.svg)
+![Projects](https://img.shields.io/badge/Projects-11-success.svg)
+![Status](https://img.shields.io/badge/Status-Completed-brightgreen.svg)
+![Learning](https://img.shields.io/badge/Learning-Programming-orange.svg)
+
 A collection of my C programming journey—from learning the fundamentals to building complete console-based projects.
 
 This repository serves as my personal coding journal where I document everything I learn in C through practice problems, experiments, and projects. The goal is to build a strong programming foundation before moving on to C++ and Data Structures & Algorithms.
