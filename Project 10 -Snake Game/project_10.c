@@ -13,7 +13,7 @@ int food_y;
 int snake_x;
 int snake_y;
 int score = 0;
-int speed = 200;
+int speed = 50;
 void entry();
 void draw();
 void setup();
@@ -37,14 +37,25 @@ void hideCursor()
 }
 void entry()
 {
-  char ch = 'x';
+  char ch = 'w';
   setup();
   draw();
   while (1)
   {
     if (kbhit())
     {
-      ch = getch();
+      char key = getch();
+      if (key == 'w' && ch != 's')
+        ch = 'w';
+
+      else if (key == 's' && ch != 'w')
+        ch = 's';
+
+      else if (key == 'a' && ch != 'd')
+        ch = 'a';
+
+      else if (key == 'd' && ch != 'a')
+        ch = 'd';
     }
     if (ch == 'w')
     {
@@ -90,10 +101,10 @@ void entry()
     {
       tail_length++;
       score += 10;
-      speed -= 10;
-      if (speed < 50)
+      speed -= 2;
+      if (speed < 4)
       {
-        speed = 50;
+        speed = 1;
       }
       food_x = rand() % width;
       food_y = rand() % height;
@@ -101,13 +112,18 @@ void entry()
 
     Sleep(speed);
     draw();
+    if (isTail(snake_x, snake_y))
+    {
+      printf("\n\n\t\tYOUR FINAL SCORE IS : %d\n\n", score);
+      break;
+    }
   }
 }
 
 void draw()
 {
-  gotoxy(0, 0);
-  // printf("\t\t\t\tSNAKE GAME\n\n");
+  gotoxy(0, 4);
+  printf("\t\t\tSNAKE GAME\n\n");
   for (int i = 0; i < width + 2; i++)
   {
     printf("#");
@@ -126,11 +142,11 @@ void draw()
       }
       else if (i == food_y && j == food_x)
       {
-        printf("F");
+        printf("*");
       }
-      else if (isTail(j,i))
+      else if (isTail(j, i))
       {
-        printf("o");
+        printf("0");
       }
       else
       {
@@ -157,14 +173,14 @@ void setup()
 
 void updateTail()
 {
-    for (int i = tail_length - 1; i > 0; i--)
-    {
-        tail_x[i] = tail_x[i - 1];
-        tail_y[i] = tail_y[i - 1];
-    }
+  for (int i = tail_length - 1; i > 0; i--)
+  {
+    tail_x[i] = tail_x[i - 1];
+    tail_y[i] = tail_y[i - 1];
+  }
 
-    tail_x[0] = snake_x;
-    tail_y[0] = snake_y;
+  tail_x[0] = snake_x;
+  tail_y[0] = snake_y;
 }
 
 int isTail(int x, int y)
