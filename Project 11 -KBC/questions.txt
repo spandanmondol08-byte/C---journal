@@ -1,0 +1,7 @@
+Question: Which keyword is used to define a function in Python?
+A. define
+B. func
+C. def
+D. function
+Time: 20
+Prize: ₹3000

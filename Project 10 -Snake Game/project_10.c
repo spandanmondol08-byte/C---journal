@@ -13,7 +13,7 @@ int food_y;
 int snake_x;
 int snake_y;
 int score = 0;
-int speed = 50;
+int speed = 200;
 void entry();
 void draw();
 void setup();
@@ -101,10 +101,10 @@ void entry()
     {
       tail_length++;
       score += 10;
-      speed -= 2;
-      if (speed < 4)
+      speed -= 10;
+      if (speed < 50)
       {
-        speed = 1;
+        speed = 50;
       }
       food_x = rand() % width;
       food_y = rand() % height;
