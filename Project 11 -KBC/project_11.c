@@ -132,7 +132,7 @@ void print_quiz(q_struct questions[], int i)
 
 int play(q_struct questions[], int i)
 {
-  char ans = getch();
+  char ans = getche();
   ans = toupper(ans);
   if (ans == 'L')
   {
@@ -143,7 +143,7 @@ int play(q_struct questions[], int i)
     }
     else if (x == 1)
     {
-      printf("%s========================================%s\n", blue, colour_end);
+      printf("%s\n\n========================================%s\n", blue, colour_end);
       printf("%s       SKIP QUESTION USED%s\n", yellow, colour_end);
       printf("%s========================================%s\n\n", blue, colour_end);
       printf("%sThis question has been skipped.%s\n", green, colour_end);
@@ -155,7 +155,7 @@ int play(q_struct questions[], int i)
     {
       fifty_fifty(questions, i);
 
-      char ans = toupper(getch());
+      char ans = toupper(getche());
 
       if (ans == questions[i].correct_op)
       {
@@ -174,7 +174,7 @@ int play(q_struct questions[], int i)
       }
       else
       {
-        printf("%sWrong Answer!!!%s\n",
+        printf("%s\nWrong Answer!!!%s\n",
                red,
                colour_end);
 
@@ -201,7 +201,7 @@ int play(q_struct questions[], int i)
   }
   else
   {
-    printf("%sWrong Answer!!!%s\n\n", red, colour_end);
+    printf("%s\nWrong Answer!!!%s\n\n", red, colour_end);
     printf("%sYour Earning : %d%s", magenta, earnings, colour_end);
     return 0;
   }
@@ -218,24 +218,24 @@ int lifeline()
   printf("%s0. Cancel\n\n%s", red, colour_end);
 
   printf("%s\nChoose a lifeline : %s", magenta, colour_end);
-  choice = getch();
+  choice = getche();
 
-  if (choice == 1 && skip_used == 1)
+  if (choice == '1' && skip_used == 1)
   {
     printf("Skip already used!\n");
     return 0;
   }
-  else if (choice == 1 && skip_used == 0)
+  else if (choice == '1' && skip_used == 0)
   {
     skip_used = 1;
     return 1;
   }
-  else if (choice == 2 && fifty_used == 1)
+  else if (choice == '2' && fifty_used == 1)
   {
     printf("50-50 already used!\n");
     return 0;
   }
-  else if (choice == 2 && fifty_used == 0)
+  else if (choice == '2' && fifty_used == 0)
   {
     fifty_used = 1;
     return 2;
@@ -261,7 +261,7 @@ void fifty_fifty(q_struct questions[], int i)
 
   int keep = wrong[rand() % 3];
 
-  printf("%s========================================%s\n", blue, colour_end);
+  printf("%s\n\n========================================%s\n", blue, colour_end);
   printf("%s          FIFTY - FIFTY USED%s\n", yellow, colour_end);
   printf("%s========================================%s\n\n", blue, colour_end);
 
