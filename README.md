@@ -168,13 +168,32 @@ A real-time Snake game played in the console.
 ---
 
 ## 🎤 Project 11 - KBC (Kaun Banega Crorepati)
-A quiz game inspired by the popular television show.
+
+A console-based quiz game inspired by the popular television show **Kaun Banega Crorepati (KBC)**. 
+
+### Features
+- Questions Loaded from a File
+- Multiple Categories of Questions
+- Random Prize Money Distribution
+- Time-Limited Questions
+- Skip Question Lifeline
+- 50-50 Lifeline
+- Real-Time Score & Earnings Tracking
+- Colored Console Interface
+- Case-Insensitive Answer Validation
 
 ### Concepts Used
-- Structures
-- File Handling
-- Functions
-- Switch statements
+* Structures
+* File Handling
+* Functions
+* Arrays
+* Loops
+* Conditional Statements
+* Random Number Generation (`rand()`)
+* String Handling
+* ANSI Escape Codes (Colored Console Output)
+* Timer using `time()` and `kbhit()`
+  
 
 ---
 
