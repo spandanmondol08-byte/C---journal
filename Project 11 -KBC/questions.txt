@@ -3,5 +3,6 @@ A. define
 B. func
 C. def
 D. function
+Correct: C
 Time: 20
-Prize: ₹3000
+Prize: 3000
