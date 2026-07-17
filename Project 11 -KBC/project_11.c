@@ -1,8 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <conio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <ctype.h>
 
-int earnings=0;
+int earnings = 0;
+int skip_used = 0;
+int fifty_used = 0;
 
 // COLOURS
 
@@ -24,70 +29,70 @@ typedef struct KBC
   char correct_op;
   int timeout;
   int prize;
-}q_struct;
-
+} q_struct;
 
 // FUNCTIONS
 
-
-void read(q_struct questions[],int);
+void read(q_struct questions[], int);
 void qno(int *);
-void print_quiz(q_struct questions[],int);
-void play(q_struct questions[],int);
+void print_quiz(q_struct questions[], int);
+int play(q_struct questions[], int);
+int lifeline();
+void fifty_fifty(q_struct questions[], int);
 
-void read(q_struct questions[],int question_nos)
+void read(q_struct questions[], int question_nos)
 {
-  FILE * ptr;
-  ptr = fopen("questions.txt","r");
+  FILE *ptr;
+  ptr = fopen("questions.txt", "r");
   if (ptr == NULL)
   {
     printf("Cannot open questions.txt\n");
     return;
   }
-  for(int i = 0 ; i<question_nos; i++)
+  for (int i = 0; i < question_nos; i++)
   {
-    fscanf(ptr,"Question: ");
-    fgets(questions[i].question,300,ptr);
-    if (questions[i].question[strlen(questions[i].question)-1]=='\n')
+    fscanf(ptr, "Question: ");
+    fgets(questions[i].question, 300, ptr);
+    if (questions[i].question[strlen(questions[i].question) - 1] == '\n')
     {
-      questions[i].question[strlen(questions[i].question)-1]='\0';
+      questions[i].question[strlen(questions[i].question) - 1] = '\0';
     }
-    fscanf(ptr,"A. ");
-    fgets(questions[i].options[0],100,ptr);
-    if (questions[i].options[0][strlen(questions[i].options[0])-1]=='\n')
+    fscanf(ptr, "A. ");
+    fgets(questions[i].options[0], 100, ptr);
+    if (questions[i].options[0][strlen(questions[i].options[0]) - 1] == '\n')
     {
-      questions[i].options[0][strlen(questions[i].options[0])-1]='\0';
+      questions[i].options[0][strlen(questions[i].options[0]) - 1] = '\0';
     }
-    fscanf(ptr,"B. ");
-    fgets(questions[i].options[1],100,ptr);
-    if (questions[i].options[1][strlen(questions[i].options[1])-1]=='\n')
+    fscanf(ptr, "B. ");
+    fgets(questions[i].options[1], 100, ptr);
+    if (questions[i].options[1][strlen(questions[i].options[1]) - 1] == '\n')
     {
-      questions[i].options[1][strlen(questions[i].options[1])-1]='\0';
+      questions[i].options[1][strlen(questions[i].options[1]) - 1] = '\0';
     }
-    fscanf(ptr,"C. ");
-    fgets(questions[i].options[2],100,ptr);
-    if (questions[i].options[2][strlen(questions[i].options[2])-1]=='\n')
+    fscanf(ptr, "C. ");
+    fgets(questions[i].options[2], 100, ptr);
+    if (questions[i].options[2][strlen(questions[i].options[2]) - 1] == '\n')
     {
-      questions[i].options[2][strlen(questions[i].options[2])-1]='\0';
+      questions[i].options[2][strlen(questions[i].options[2]) - 1] = '\0';
     }
-    fscanf(ptr,"D. ");
-    fgets(questions[i].options[3],100,ptr);
-    if (questions[i].options[3][strlen(questions[i].options[3])-1]=='\n')
+    fscanf(ptr, "D. ");
+    fgets(questions[i].options[3], 100, ptr);
+    if (questions[i].options[3][strlen(questions[i].options[3]) - 1] == '\n')
     {
-      questions[i].options[3][strlen(questions[i].options[3])-1]='\0';
+      questions[i].options[3][strlen(questions[i].options[3]) - 1] = '\0';
     }
-    fscanf(ptr,"Correct: %c\n",&questions[i].correct_op);
-    fscanf(ptr,"Time: %d\n",&questions[i].timeout);
-    fscanf(ptr,"Prize: %d\n",&questions[i].prize);
+    fscanf(ptr, "Correct: %c\n", &questions[i].correct_op);
+    fscanf(ptr, "Time: %d\n", &questions[i].timeout);
+    fscanf(ptr, "Prize: %d\n", &questions[i].prize);
   }
   fclose(ptr);
 }
 
-void qno(int * qn)
+void qno(int *qn)
 {
-  int c=0;
-  FILE * ptr1;
-  ptr1=fopen("questions.txt","r");
+  int c = 0;
+  FILE *ptr1;
+  ptr1 = fopen("questions.txt", "r");
   if (ptr1 == NULL)
   {
     printf("Cannot open questions.txt\n");
@@ -95,66 +100,215 @@ void qno(int * qn)
   }
   while (1)
   {
-    char ch=fgetc(ptr1);
-    if (ch==EOF)
+    char ch = fgetc(ptr1);
+    if (ch == EOF)
     {
       fclose(ptr1);
       break;
     }
     else
     {
-      if (ch=='\n')
+      if (ch == '\n')
       {
         c++;
       }
     }
   }
   c++;
-  *qn=c/8;
+  *qn = c / 8;
 }
 
-void print_quiz(q_struct questions[],int i)
+void print_quiz(q_struct questions[], int i)
 {
-  printf("%sQuestion %d.%s\n\n",white,i+1,colour_end);
-  printf("%s%s%s\n\n",yellow,questions[i].question,colour_end);
-  printf("%sA. %s%s\n",cyan,questions[i].options[0],colour_end);
-  printf("%sB. %s%s\n",cyan,questions[i].options[1],colour_end);
-  printf("%sC. %s%s\n",cyan,questions[i].options[2],colour_end);
-  printf("%sD. %s%s\n\n",cyan,questions[i].options[3],colour_end);
-  printf("%sHurry up!! You have only %d seconds to answer...%s\n\n",red,questions[i].timeout,colour_end);
-  printf("%sEnter your answer (A,B,C OR D) or L for Lifeline : %s",magenta,colour_end);
+  printf("%sQuestion %d.%s\n\n", white, i + 1, colour_end);
+  printf("%s%s%s\n\n", yellow, questions[i].question, colour_end);
+  printf("%sA. %s%s\n", cyan, questions[i].options[0], colour_end);
+  printf("%sB. %s%s\n", cyan, questions[i].options[1], colour_end);
+  printf("%sC. %s%s\n", cyan, questions[i].options[2], colour_end);
+  printf("%sD. %s%s\n\n", cyan, questions[i].options[3], colour_end);
+  printf("%sHurry up!! You have only %d seconds to answer...%s\n\n", red, questions[i].timeout, colour_end);
+  printf("%sEnter your answer (A,B,C OR D) or L for Lifeline : %s", magenta, colour_end);
 }
 
-void play(q_struct questions[],int i)
+int play(q_struct questions[], int i)
 {
-  char ans=getch();
-  if (ans=='L')
+  char ans = getch();
+  ans = toupper(ans);
+  if (ans == 'L')
   {
-    lifeline();
+    int x = lifeline();
+    if (x == 0)
+    {
+      lifeline();
+    }
+    else if (x == 1)
+    {
+      printf("%s========================================%s\n", blue, colour_end);
+      printf("%s       SKIP QUESTION USED%s\n", yellow, colour_end);
+      printf("%s========================================%s\n\n", blue, colour_end);
+      printf("%sThis question has been skipped.%s\n", green, colour_end);
+      printf("%sNo prize will be awarded for this question.%s\n", red, colour_end);
+      printf("%sMoving to the next question...%s\n\n", cyan, colour_end);
+      return 1;
+    }
+    else if (x == 2)
+    {
+      fifty_fifty(questions, i);
+
+      char ans = toupper(getch());
+
+      if (ans == questions[i].correct_op)
+      {
+        printf("%sCorrect Answer!!!%s\n", green, colour_end);
+        printf("%sYou have won Rs.%d%s\n\n",
+               green,
+               questions[i].prize,
+               colour_end);
+
+        earnings += questions[i].prize;
+
+        printf("%sTotal Earnings : Rs.%d%s\n",
+               magenta,
+               earnings,
+               colour_end);
+      }
+      else
+      {
+        printf("%sWrong Answer!!!%s\n",
+               red,
+               colour_end);
+
+        printf("%sYour Earnings : Rs.%d%s\n",
+               magenta,
+               earnings,
+               colour_end);
+
+        return 0; 
+      }
+    }
+    else
+    {
+      print_quiz(questions, i);
+      play(questions, i);
+    }
   }
-  else if (ans==questions[i].correct_op)
+  else if (ans == questions[i].correct_op)
   {
-    printf("%sCorrect Answer!!!%s\n"green,colour_end);
-    printf("%sYou have won Rs.%d%s\n\n",green,questions[i].prize,colour_end);
-    earnings=earnings+questions[i].prize;
-    printf("%sTotal Earning : Rs.%d%s\n",magenta,earnings,colour_end);
+    printf("%sCorrect Answer!!!%s\n", green, colour_end);
+    printf("%sYou have won Rs.%d%s\n\n", green, questions[i].prize, colour_end);
+    earnings = earnings + questions[i].prize;
+    printf("%sTotal Earning : Rs.%d%s\n", magenta, earnings, colour_end);
   }
-  else{
-    printf("%sWrong Answer!!!%s",red,colour_end);
-    printf("%sYour Earning : %d%s",magenta,earnings,colour_end);
+  else
+  {
+    printf("%sWrong Answer!!!%s\n\n", red, colour_end);
+    printf("%sYour Earning : %d%s", magenta, earnings, colour_end);
+    return 0;
+  }
+}
+
+int lifeline()
+{
+  int choice;
+  printf("%s\n===== LIFELINES =====\n\n%s", cyan, colour_end);
+
+  printf("%s1. Skip Question\n%s", blue, colour_end);
+  printf("%s2. 50-50\n%s", blue, colour_end);
+
+  printf("%s0. Cancel\n\n%s", red, colour_end);
+
+  printf("%s\nChoose a lifeline : %s", magenta, colour_end);
+  choice = getch();
+
+  if (choice == 1 && skip_used == 1)
+  {
+    printf("Skip already used!\n");
+    return 0;
+  }
+  else if (choice == 1 && skip_used == 0)
+  {
+    skip_used = 1;
+    return 1;
+  }
+  else if (choice == 2 && fifty_used == 1)
+  {
+    printf("50-50 already used!\n");
+    return 0;
+  }
+  else if (choice == 2 && fifty_used == 0)
+  {
+    fifty_used = 1;
+    return 2;
+  }
+  else
+  {
+    return 3;
+  }
+}
+
+void fifty_fifty(q_struct questions[], int i)
+{
+  char option[] = {'A', 'B', 'C', 'D'};
+  int correct = questions[i].correct_op - 'A';
+  int wrong[3];
+  int k = 0;
+
+  for (int j = 0; j < 4; j++)
+  {
+    if (j != correct)
+      wrong[k++] = j;
   }
 
+  int keep = wrong[rand() % 3];
+
+  printf("%s========================================%s\n", blue, colour_end);
+  printf("%s          FIFTY - FIFTY USED%s\n", yellow, colour_end);
+  printf("%s========================================%s\n\n", blue, colour_end);
+
+  printf("%sTwo incorrect options have been removed.%s\n\n", green, colour_end);
+
+  // Print only the correct option and one random wrong option
+  for (int j = 0; j < 4; j++)
+  {
+    if (j == correct || j == keep)
+    {
+      printf("%s%c. %s%s\n",
+             cyan,
+             option[j],
+             questions[i].options[j],
+             colour_end);
+    }
+  }
+
+  printf("\n%sEnter your answer (A, B, C or D): %s",
+         magenta,
+         colour_end);
 }
 
 // MAIN
 
-int main() {
-  printf("\n\t\t\t\t%sCHALO SURU KARE YEH ADBHUT KHEL KAUN BANEGA COREPATI !!!!%s\n\n",blue,colour_end);
-  int question_nos ;
+int main()
+{
+  srand(time(NULL));
+  printf("\n\t\t\t\t%sCHALO SURU KARE YEH ADBHUT KHEL KAUN BANEGA COREPATI !!!!%s\n\n", blue, colour_end);
+  int question_nos;
   qno(&question_nos);
   q_struct questions[question_nos];
-  read(questions,question_nos);
-  int i =0;
-  print_quiz(questions,i);
+  read(questions, question_nos);
+  for (int i = 0; i<question_nos; i++)
+  {
+    print_quiz(questions, i);
+    int z = play(questions, i);
+    if(z==1)
+    {
+      continue;
+    }
+    if(z==0)
+    {
+      break;
+    }
+  }
+  printf("%s\nCongratulations!!! You have won the game and a cash prize of Rs.%d%s\n\n", yellow, earnings, colour_end);
+
   return 0;
 }
