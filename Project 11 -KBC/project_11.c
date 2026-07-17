@@ -4,6 +4,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <windows.h>
 
 int earnings = 0;
 int skip_used = 0;
@@ -39,6 +40,7 @@ void print_quiz(q_struct questions[], int);
 int play(q_struct questions[], int);
 int lifeline();
 void fifty_fifty(q_struct questions[], int);
+char timed_input(int);
 
 void read(q_struct questions[], int question_nos)
 {
@@ -132,8 +134,12 @@ void print_quiz(q_struct questions[], int i)
 
 int play(q_struct questions[], int i)
 {
-  char ans = getche();
-  ans = toupper(ans);
+  char ans = timed_input(questions[i].timeout);
+  if (ans=='T')
+  {
+    printf("%s\n\nTIME OVER!!!!!%s\n\n",red,colour_end);
+    return 0;
+  }
   if (ans == 'L')
   {
     int x = lifeline();
@@ -154,13 +160,17 @@ int play(q_struct questions[], int i)
     else if (x == 2)
     {
       fifty_fifty(questions, i);
-
-      char ans = toupper(getche());
-
+      printf("%sHurry up!! You have only %d seconds to answer...%s\n\n", red, questions[i].timeout, colour_end);
+      char ans = timed_input(questions[i].timeout);
+      if(ans=='T')
+      {
+        printf("%s\n\nTIME OVER!!!!!%s\n\n",red,colour_end);
+        return 0;
+      }
       if (ans == questions[i].correct_op)
       {
-        printf("%sCorrect Answer!!!%s\n", green, colour_end);
-        printf("%sYou have won Rs.%d%s\n\n",
+        printf("%s\nCorrect Answer!!!%s\n", green, colour_end);
+        printf("%s\nYou have won Rs.%d%s\n\n",
                green,
                questions[i].prize,
                colour_end);
@@ -194,8 +204,8 @@ int play(q_struct questions[], int i)
   }
   else if (ans == questions[i].correct_op)
   {
-    printf("%sCorrect Answer!!!%s\n", green, colour_end);
-    printf("%sYou have won Rs.%d%s\n\n", green, questions[i].prize, colour_end);
+    printf("%s\nCorrect Answer!!!%s\n", green, colour_end);
+    printf("%s\nYou have won Rs.%d%s\n\n", green, questions[i].prize, colour_end);
     earnings = earnings + questions[i].prize;
     printf("%sTotal Earning : Rs.%d%s\n", magenta, earnings, colour_end);
   }
@@ -285,11 +295,25 @@ void fifty_fifty(q_struct questions[], int i)
          colour_end);
 }
 
+char timed_input(int sec)
+{
+  time_t start = time(NULL);
+  while(time(NULL)-start<sec)
+  {
+    if (kbhit())
+    {
+      return toupper(getche());
+    }
+  }
+  return 'T';
+}
+
 // MAIN
 
 int main()
 {
   srand(time(NULL));
+  int r=0;
   printf("\n\t\t\t\t%sCHALO SURU KARE YEH ADBHUT KHEL KAUN BANEGA COREPATI !!!!%s\n\n", blue, colour_end);
   int question_nos;
   qno(&question_nos);
@@ -305,10 +329,18 @@ int main()
     }
     if(z==0)
     {
+      r=1;
       break;
     }
+    printf("\n%sEnter any key to go to the next question : %s\n",yellow,colour_end);
+    char p = getch();
+    printf("\n\n-------------------------------------------------------------\n\n");
   }
-  printf("%s\nCongratulations!!! You have won the game and a cash prize of Rs.%d%s\n\n", yellow, earnings, colour_end);
-
+  if(r==0)
+  {
+    printf("%s\nCongratulations!!! You have won the game and a total cash prize of Rs.%d%s\n\n", yellow, earnings, colour_end);
+  }
+  printf("%s\n\nTHANKS FOR PLAYING%s\n\n",white,colour_end);
+  
   return 0;
 }

@@ -1,8 +1,160 @@
-Question: Which keyword is used to define a function in Python ?
-A. define
-B. func
-C. def
-D. function
+Question: Which planet is known as the Red Planet?
+A. Venus
+B. Mars
+C. Jupiter
+D. Saturn
+Correct: B
+Time: 10
+Prize: 1800
+Question: Which language is primarily used for Android app development?
+A. Python
+B. Java
+C. HTML
+D. SQL
+Correct: B
+Time: 12
+Prize: 2500
+Question: What is the capital of Australia?
+A. Sydney
+B. Melbourne
+C. Canberra
+D. Perth
 Correct: C
-Time: 20
+Time: 18
+Prize: 4200
+Question: Who invented the World Wide Web?
+A. Bill Gates
+B. Steve Jobs
+C. Tim Berners-Lee
+D. Dennis Ritchie
+Correct: C
+Time: 25
+Prize: 4800
+Question: Which gas do plants absorb from the atmosphere?
+A. Oxygen
+B. Nitrogen
+C. Carbon Dioxide
+D. Hydrogen
+Correct: C
+Time: 10
+Prize: 1200
+Question: Which Indian state is known as the Land of Five Rivers?
+A. Haryana
+B. Punjab
+C. Rajasthan
+D. Gujarat
+Correct: B
+Time: 15
 Prize: 3000
+Question: What is the output of 7 % 3 in C?
+A. 2
+B. 1
+C. 3
+D. 0
+Correct: B
+Time: 12
+Prize: 2200
+Question: Which is the largest ocean on Earth?
+A. Atlantic Ocean
+B. Arctic Ocean
+C. Indian Ocean
+D. Pacific Ocean
+Correct: D
+Time: 14
+Prize: 2700
+Question: Who wrote the Indian National Anthem?
+A. Bankim Chandra Chattopadhyay
+B. Rabindranath Tagore
+C. Sarojini Naidu
+D. Subhas Chandra Bose
+Correct: B
+Time: 18
+Prize: 3500
+Question: Which data structure works on the FIFO principle?
+A. Stack
+B. Queue
+C. Tree
+D. Graph
+Correct: B
+Time: 20
+Prize: 4000
+Question: Which element has the chemical symbol Fe?
+A. Fluorine
+B. Iron
+C. Francium
+D. Fermium
+Correct: B
+Time: 10
+Prize: 1400
+Question: Which is the smallest prime number?
+A. 0
+B. 1
+C. 2
+D. 3
+Correct: C
+Time: 10
+Prize: 1000
+Question: Which country hosted the FIFA World Cup 2022?
+A. Russia
+B. Qatar
+C. Brazil
+D. Germany
+Correct: B
+Time: 18
+Prize: 3200
+Question: Which keyword is used to terminate a loop in C?
+A. stop
+B. exit
+C. break
+D. quit
+Correct: C
+Time: 15
+Prize: 2600
+Question: Which blood group is known as the universal donor?
+A. AB+
+B. O-
+C. A+
+D. B+
+Correct: B
+Time: 20
+Prize: 4300
+Question: Which Mughal emperor built the Taj Mahal?
+A. Akbar
+B. Babur
+C. Shah Jahan
+D. Humayun
+Correct: C
+Time: 16
+Prize: 2900
+Question: Which device is called the brain of a computer?
+A. RAM
+B. CPU
+C. Monitor
+D. SSD
+Correct: B
+Time: 10
+Prize: 1600
+Question: What is the SI unit of electric current?
+A. Volt
+B. Ohm
+C. Ampere
+D. Watt
+Correct: C
+Time: 14
+Prize: 2400
+Question: Which famous scientist proposed the theory of relativity?
+A. Isaac Newton
+B. Nikola Tesla
+C. Albert Einstein
+D. Galileo Galilei
+Correct: C
+Time: 22
+Prize: 5000
+Question: Which sorting algorithm has the best average-case time complexity among these?
+A. Bubble Sort
+B. Selection Sort
+C. Merge Sort
+D. Insertion Sort
+Correct: C
+Time: 30
+Prize: 4600
