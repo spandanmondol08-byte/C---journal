@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <string.h>
+#include <conio.h>
+
+int earnings=0;
 
 // COLOURS
 
@@ -30,6 +33,7 @@ typedef struct KBC
 void read(q_struct questions[],int);
 void qno(int *);
 void print_quiz(q_struct questions[],int);
+void play(q_struct questions[],int);
 
 void read(q_struct questions[],int question_nos)
 {
@@ -117,13 +121,35 @@ void print_quiz(q_struct questions[],int i)
   printf("%sB. %s%s\n",cyan,questions[i].options[1],colour_end);
   printf("%sC. %s%s\n",cyan,questions[i].options[2],colour_end);
   printf("%sD. %s%s\n\n",cyan,questions[i].options[3],colour_end);
-  printf("%sHurry up!! You have only %d seconds to answer...%s\n",red,questions[i].timeout,colour_end);
+  printf("%sHurry up!! You have only %d seconds to answer...%s\n\n",red,questions[i].timeout,colour_end);
+  printf("%sEnter your answer (A,B,C OR D) or L for Lifeline : %s",magenta,colour_end);
+}
+
+void play(q_struct questions[],int i)
+{
+  char ans=getch();
+  if (ans=='L')
+  {
+    lifeline();
+  }
+  else if (ans==questions[i].correct_op)
+  {
+    printf("%sCorrect Answer!!!%s\n"green,colour_end);
+    printf("%sYou have won Rs.%d%s\n\n",green,questions[i].prize,colour_end);
+    earnings=earnings+questions[i].prize;
+    printf("%sTotal Earning : Rs.%d%s\n",magenta,earnings,colour_end);
+  }
+  else{
+    printf("%sWrong Answer!!!%s",red,colour_end);
+    printf("%sYour Earning : %d%s",magenta,earnings,colour_end);
+  }
+
 }
 
 // MAIN
 
 int main() {
-  printf("\n\t\t\t\t%sCHALO SURU KARE YEH ADBHUT KHEL KAUN BANEGA COREPATI !!!!%s\n\n",green,colour_end);
+  printf("\n\t\t\t\t%sCHALO SURU KARE YEH ADBHUT KHEL KAUN BANEGA COREPATI !!!!%s\n\n",blue,colour_end);
   int question_nos ;
   qno(&question_nos);
   q_struct questions[question_nos];
