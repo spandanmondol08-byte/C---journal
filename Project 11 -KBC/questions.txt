@@ -1,4 +1,4 @@
-Question: Which keyword is used to define a function in Python?
+Question: Which keyword is used to define a function in Python ?
 A. define
 B. func
 C. def

@@ -1,6 +1,17 @@
 #include <stdio.h>
 #include <string.h>
 
+// COLOURS
+
+char red[] = "\033[1;31m";
+char green[] = "\033[1;32m";
+char yellow[] = "\033[1;33m";
+char blue[] = "\033[1;34m";
+char magenta[] = "\033[1;35m";
+char cyan[] = "\033[1;36m";
+char white[] = "\033[1;37m";
+char colour_end[] = "\033[0m";
+
 // STRUCTURE DEFINATION
 
 typedef struct KBC
@@ -12,13 +23,13 @@ typedef struct KBC
   int prize;
 }q_struct;
 
-q_struct questions[20];
 
 // FUNCTIONS
 
 
 void read(q_struct questions[],int);
-void qno(int);
+void qno(int *);
+void print_quiz(q_struct questions[],int);
 
 void read(q_struct questions[],int question_nos)
 {
@@ -68,7 +79,7 @@ void read(q_struct questions[],int question_nos)
   fclose(ptr);
 }
 
-void qno(int question_nos)
+void qno(int * qn)
 {
   int c=0;
   FILE * ptr1;
@@ -95,14 +106,29 @@ void qno(int question_nos)
     }
   }
   c++;
-  question_nos=c/8;
+  *qn=c/8;
+}
+
+void print_quiz(q_struct questions[],int i)
+{
+  printf("%sQuestion %d.%s\n\n",white,i+1,colour_end);
+  printf("%s%s%s\n\n",yellow,questions[i].question,colour_end);
+  printf("%sA. %s%s\n",cyan,questions[i].options[0],colour_end);
+  printf("%sB. %s%s\n",cyan,questions[i].options[1],colour_end);
+  printf("%sC. %s%s\n",cyan,questions[i].options[2],colour_end);
+  printf("%sD. %s%s\n\n",cyan,questions[i].options[3],colour_end);
+  printf("%sHurry up!! You have only %d seconds to answer...%s\n",red,questions[i].timeout,colour_end);
 }
 
 // MAIN
 
 int main() {
+  printf("\n\t\t\t\t%sCHALO SURU KARE YEH ADBHUT KHEL KAUN BANEGA COREPATI !!!!%s\n\n",green,colour_end);
   int question_nos ;
-  qno(question_nos);
+  qno(&question_nos);
+  q_struct questions[question_nos];
   read(questions,question_nos);
+  int i =0;
+  print_quiz(questions,i);
   return 0;
 }
